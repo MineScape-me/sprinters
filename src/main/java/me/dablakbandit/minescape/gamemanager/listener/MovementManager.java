@@ -38,6 +38,7 @@ public class MovementManager implements Listener{
 	public boolean checkMove(Player player, Location from, Location to, MovementType type){
 		CorePlayers pl = corePlayerManager.getPlayer(player);
 		boolean cancel = false;
+		if(!hasMoved(from, to)){ return false; }
 		if(player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR){
 			Block fromBlock = from.getBlock();
 			Block toBlock = to.getBlock();
@@ -52,6 +53,10 @@ public class MovementManager implements Listener{
 			}
 		}
 		return cancel;
+	}
+	
+	public boolean hasMoved(Location from, Location to){
+		return from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ();
 	}
 	
 	public void restoreToSafe(Player player, Location to, Location current){

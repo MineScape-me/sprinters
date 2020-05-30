@@ -14,6 +14,7 @@ import me.dablakbandit.core.players.CorePlayers;
 import me.dablakbandit.core.players.listener.CorePlayersListener;
 import me.dablakbandit.minescape.gamemanager.game.GameInstance;
 import me.dablakbandit.minescape.gamemanager.listener.MovementManager;
+import me.dablakbandit.minescape.gamemanager.scoreboard.GameScoreboardManager;
 import me.dablakbandit.minescape.sprinters.SprintersPlugin;
 
 public class GameManager extends CorePlayersListener{
@@ -26,6 +27,7 @@ public class GameManager extends CorePlayersListener{
 	
 	private GameManager(){
 		CorePlayerManager.getInstance().addListener(this);
+		CorePlayerManager.getInstance().addListener(GameScoreboardManager.getInstance());
 	}
 	
 	public void enable(){
