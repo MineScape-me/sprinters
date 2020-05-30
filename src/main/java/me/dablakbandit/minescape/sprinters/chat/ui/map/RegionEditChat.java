@@ -1,10 +1,7 @@
 package me.dablakbandit.minescape.sprinters.chat.ui.map;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -45,7 +42,7 @@ public class RegionEditChat extends OpenChat implements CommandAccepter{
 		
 		int count = 0;
 		try{
-			List<Field> fields = NMSUtils.getFieldsIncludingUpper(modifier.getClass());
+			List<Field> fields = getFields(modifier.getClass());
 			for(Field field : fields){
 				String value = "" + field.get(modifier);
 				jf.append(" ").appendHoverClick(field.getName() + ": " + value, new ShowTextEvent(field.getType().getSimpleName()), new SuggestCommandEvent(createCommand("edit " + (count++) + " " + value))).newLine();
@@ -57,6 +54,14 @@ public class RegionEditChat extends OpenChat implements CommandAccepter{
 		jf.append(" ").appendClick("< Back", new RunCommandEvent(createCommand("back"))).newLine();
 		jf.append(cai.getHeaderFooterString());
 		send(jf, pl);
+	}
+	
+	public List<Field> getFields(Class<?> clazz){
+		try{
+			return NMSUtils.getFieldsIncludingUpper(clazz).stream().filter(field -> !java.lang.reflect.Modifier.isStatic(field.getModifiers())).collect(Collectors.toList());
+		}catch(Exception e){
+			return new ArrayList<>(0);
+		}
 	}
 	
 	@Override
@@ -72,7 +77,7 @@ public class RegionEditChat extends OpenChat implements CommandAccepter{
 				int set = Integer.parseInt(args[1]);
 				String value = Arrays.stream(Arrays.copyOfRange(args, 2, args.length)).collect(Collectors.joining(" "));
 				Modifier modifier = region.getModifier();
-				List<Field> fields = NMSUtils.getFieldsIncludingUpper(modifier.getClass());
+				List<Field> fields = getFields(modifier.getClass());
 				Field field = fields.get(set);
 				field.set(modifier, mappers.get(field.getType()).apply(value));
 				refresh(pl);
