@@ -1,9 +1,11 @@
 package me.dablakbandit.minescape.sprinters.game.state.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.potion.PotionEffectType;
 
 import me.dablakbandit.core.players.CorePlayers;
 import me.dablakbandit.minescape.sprinters.game.SprintersState;
@@ -51,6 +53,7 @@ public class SprintersGameState extends SprintersState{
 		if(gameInstance.getPlayersList().size() == 0){
 			end();
 		}
+		Arrays.stream(PotionEffectType.values()).forEach(pl.getPlayer()::removePotionEffect);
 	}
 	
 	private static int	COUNTDOWN_TIME	= 15;
