@@ -1,0 +1,6 @@
+name: Sprinters
+version: @version@
+main: me.dablakbandit.minescape.sprinters.SprintersPlugin
+authors: [Dablakbandit]
+depend: [Core, WorldEdit]
+api-version: 1.13

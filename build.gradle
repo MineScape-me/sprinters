@@ -1,0 +1,77 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+}
+
+group 'me.dablakbandit'
+version '0.0.1-alpha'
+
+repositories {
+    mavenCentral()
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url = 'https://artifact.aspose.com/repo/'
+    }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url = 'http://maven.sk89q.com/repo/'
+    }
+
+    repositories {
+        flatDir {
+            dirs 'lib'
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT'
+    // The Spigot API with no shadowing. Requires the OSS repo.
+    compileOnly 'org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT' // The Bukkit API with no shadowing.
+    compileOnly 'org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT'
+    // The full Spigot server with no shadowing. Requires mavenLocal.
+    compileOnly 'org.bukkit:craftbukkit:1.13.2-R0.1-SNAPSHOT'
+    // The full CraftBukkit server with no shadowing. Requires mavenLocal.
+    compileOnly 'me.dablakbandit:core:0.2.5'
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.1.0-SNAPSHOT'
+}
+
+processResources {
+    with copySpec {
+        from 'src/main/resources'
+        filter ReplaceTokens, tokens: [
+                version: version
+        ]
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task copyJar(type: Copy) {
+    from jar // here it automatically reads jar file produced from jar task
+    into 'C:/Users/Ash/Games/Servers/Sprinters/plugins/update'
+}
+
+build.dependsOn copyJar
