@@ -13,17 +13,16 @@ public class SlowModifier extends EffectModifier{
 	
 	@Override
 	public void onEnter(SprintersGame game, Region region, CorePlayers pl, boolean already){
-		if(!already){
-			updatePotionEffect(pl.getPlayer(), PotionEffectType.SLOW, duration, level);
-			int seconds = duration / 20;
-			int delay = duration % 20;
-			pl.getPlayer().playSound(pl.getPlayer().getLocation(), Sound.ENTITY_ENDERMAN_DEATH, 1, 1);
-			for(int second = 0; second < seconds; second++){
-				int finalSecond = second;
-				MineScapeThreader.getInstance().runTaskWithDelay(() -> {
-					pl.getPlayer().sendMessage(ChatColor.YELLOW + ">> " + ChatColor.DARK_PURPLE + "Slowness ending in " + (seconds - finalSecond) + "...");
-				}, delay + (second * 20));
-			}
+		if(already){ return; }
+		updatePotionEffect(pl.getPlayer(), PotionEffectType.SLOW, duration, level);
+		int seconds = duration / 20;
+		int delay = duration % 20;
+		playSound(pl, Sound.ENTITY_ENDERMAN_DEATH, 1, 1);
+		for(int second = 0; second < seconds; second++){
+			int finalSecond = second;
+			MineScapeThreader.getInstance().runTaskWithDelay(() -> {
+				sendMessage(pl, ChatColor.YELLOW + ">> " + ChatColor.DARK_PURPLE + "Slowness ending in " + (seconds - finalSecond) + "...");
+			}, delay + (second * 20));
 		}
 	}
 }

@@ -15,6 +15,6 @@ public class EndModifier extends Modifier{
 		SprintersGameState gameState = (SprintersGameState)game.getGameState();
 		gameState.finish(pl);
 		gameState.sendMessageToPlayers(ChatColor.YELLOW + ">> " + pl.getName() + " has finished");
-		pl.getPlayer().playSound(pl.getPlayer().getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+		playSound(pl, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
 	}
 }
